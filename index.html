@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Scales Practice</title>
+
+    <!-- Vue development version, includes helpful console warnings -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <style>
+        .row {
+            margin: 20px 0;
+        }
+        .choice {
+            text-align: center;
+            font-size: xx-large;
+        }
+    </style>
+</head>
+
+<body>
+    
+    <div id="app" class="container">
+        <div class="row">
+            <div class="col-4 choice">
+                {{ scales.type }}
+            </div>
+            <div class="col-4 choice">
+                {{ scales.key }}
+            </div>
+            <div class="col-4 choice">
+                {{ scales.interval }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-8">
+                <button type="button" class="btn btn-primary btn-lg btn-block" v-on:click="nextChoice">Next!</button>
+            </div>
+            <div class="col-2"></div>
+            
+        </div>
+    </div>
+</body>
+
+<script>
+    var keys = [
+        "A♭ / G♯",
+        "C",
+        "C♯ / D♭",
+        "E♭",
+        "E"
+    ];
+    var scales = [
+        {
+            type : "Scale Separate",
+            intervals : [
+                "Major",
+                "Minor (melodic)",
+                "Minor (harmonic)"
+            ]
+        },
+        {
+            type : "Scale Legato",
+            intervals : [
+                "Major",
+                "Minor (melodic)",
+                "Minor (harmonic)"
+            ]
+        },
+        {
+            type : "Arpeggio Separate",
+            intervals : [
+                "Major",
+                "Minor"
+            ]
+        },
+        {
+            type : "Arpeggio Legato",
+            intervals : [
+                "Major",
+                "Minor"
+            ]
+        },
+    ];
+
+    function randomItem(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function choose() {
+        var key = randomItem(keys);
+        var scale = randomItem(scales);
+        var interval = randomItem(scale.intervals);
+        return {
+            type: scale.type,
+            key: key,
+            interval: interval
+        };
+    };
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            scales: choose()
+        },
+        methods: {
+            nextChoice: function() {
+                this.scales = choose();
+            }
+        }
+    });
+
+</script>
+
+</html>
