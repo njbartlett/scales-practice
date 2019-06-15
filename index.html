@@ -18,10 +18,16 @@
         .row {
             margin: 20px 0;
         }
-        .choice {
+        .card.choice {
+            width: 18rem;
+        }
+        p.card-text {
+            color: darkblue;
+        }
+        /* .choice {
             text-align: center;
             font-size: xx-large;
-        }
+        } */
     </style>
 </head>
 
@@ -29,23 +35,21 @@
     
     <div id="app" class="container">
         <div class="row">
-            <div class="col-4 choice">
-                {{ scales.type }}
+            <div class="col-3"></div>
+            <div class="col-6">
+                <div class="card bg-light border-dark mb-3 text-center">
+                    <div class="card-header">
+                        {{ scales.section}}
+                    </div>
+                    <div class="card-body">
+                        <!--<h5 class="card-title">{{ scales.section }}</h5>-->
+                        <h6 class="card-subtitle mb-2 text-muted">{{ scales.bowing }}</h6>
+                        <p class="card-text">{{ scales.detail }}</p>
+                        <button type="button" class="btn btn-primary " v-on:click="nextChoice">Next!</button>
+                    </div>
+                </div>
             </div>
-            <div class="col-4 choice">
-                {{ scales.key }}
-            </div>
-            <div class="col-4 choice">
-                {{ scales.interval }}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-2"></div>
-            <div class="col-8">
-                <button type="button" class="btn btn-primary btn-lg btn-block" v-on:click="nextChoice">Next!</button>
-            </div>
-            <div class="col-2"></div>
-            
+            <div class="col-3"></div>
         </div>
     </div>
 </body>
@@ -58,62 +62,126 @@
         "E♭",
         "E"
     ];
-    var scales = [
+    var sections = [
         {
-            type : "Scale Separate",
-            intervals : [
-                "Major",
-                "Minor (melodic)",
-                "Minor (harmonic)"
+            section: 'Scales',
+            bowing: ['Separate', 'Slurred'],
+            list: [
+                "A♭ major",
+                "G♯ minor melodic",
+                "G♯ minor harmonic",
+                "C major",
+                "C minor melodic",
+                "C minor harmonic",
+                "D♭ major",
+                "C♯ minor melodic",
+                "C♯ minor harmonic",
+                "E♭ major",
+                "E♭ minor melodic",
+                "E♭ minor harmonic",
+                "E major",
+                "E minor melodic",
+                "E minor harmonic"
             ]
         },
         {
-            type : "Scale Legato",
-            intervals : [
-                "Major",
-                "Minor (melodic)",
-                "Minor (harmonic)"
+            section: 'Arpeggios',
+            bowing: ['Separate', 'Slurred'],
+            list: [
+                "A♭ major",
+                "G♯ minor",
+                "C major",
+                "C minor",
+                "D♭ major",
+                "C♯ minor",
+                "E♭ major",
+                "E♭ minor",
+                "E major",
+                "E minor"
             ]
         },
         {
-            type : "Arpeggio Separate",
-            intervals : [
-                "Major",
-                "Minor"
+            section: 'Dominant Sevenths',
+            bowing: ['Separate', 'Slurred'],
+            list: [
+                "in the key of D♭",
+                "in the key of F",
+                "in the key of A♭",
+                "in the key of A"
             ]
         },
         {
-            type : "Arpeggio Legato",
-            intervals : [
-                "Major",
-                "Minor"
+            section: 'Diminished Sevenths',
+            bowing: ['Separate', 'Slurred'],
+            list: [
+                "starting on C",
+                "starting on E♭",
+                "starting on E",
+                "starting on A♭"
             ]
         },
+        {
+            section: 'Chromatic Scales',
+            bowing: ['Separate', 'Slurred'],
+            list: [
+                "starting on C",
+                "starting on E♭",
+                "starting on E",
+                "starting on A♭"
+            ]
+        },
+        {
+            section: 'Double-Stop Scales',
+            bowing: ['Separate'],
+            list: [
+                "in octaves in D major",
+                "in octaves in G minor melodic",
+                "in octaves in G minor harmonic",
+                "in sixths in E♭ major"
+            ]
+        },
+        {
+            section: 'In Broken Steps',
+            bowing: ['N/A'],
+            list: [
+                "in thirds in B♭ major"
+            ]
+        }
     ];
 
     function randomItem(arr) {
         return arr[Math.floor(Math.random() * arr.length)];
     }
 
-    function choose() {
-        var key = randomItem(keys);
-        var scale = randomItem(scales);
-        var interval = randomItem(scale.intervals);
-        return {
-            type: scale.type,
-            key: key,
-            interval: interval
-        };
-    };
+    function generateAllCombos() {
+        var combos = [];
+        for (var sectionIndex = 0; sectionIndex < sections.length; sectionIndex++) {
+            var section = sections[sectionIndex];
+            var sectionName = section.section;
+            for (var bowingIndex = 0; bowingIndex < section.bowing.length; bowingIndex++) {
+                var bowing = section.bowing[bowingIndex];
+                for (var listIndex = 0; listIndex < section.list.length; listIndex++) {
+                    var entry = section.list[listIndex];
+                    combos.push({
+                        section: sectionName,
+                        bowing: bowing,
+                        detail: entry
+                    });
+                }
+            }
+        }
+        return combos;
+    }
 
     var app = new Vue({
         el: '#app',
         data: {
-            scales: choose()
+            scales: randomItem(generateAllCombos())
         },
         methods: {
             nextChoice: function() {
-                this.scales = choose();
+                var combos = generateAllCombos();
+                this.scales = randomItem(combos);
             }
         }
     });
