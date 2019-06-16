@@ -19,37 +19,33 @@
             margin: 20px 0;
         }
         .card.choice {
-            width: 18rem;
+            margin: 15px 0px;
+        }
+        .choice {
+            font-size: xx-large;
         }
         p.card-text {
             color: darkblue;
         }
-        /* .choice {
-            text-align: center;
-            font-size: xx-large;
-        } */
     </style>
 </head>
 
 <body>
     
-    <div id="app" class="container">
-        <div class="row">
-            <div class="col-3"></div>
-            <div class="col-6">
-                <div class="card bg-light border-dark mb-3 text-center">
-                    <div class="card-header">
-                        {{ scales.section}}
+    <div id="app" class="container-fluid">
+        <div class="row justify-content-center">
+            <!-- <div class="col-12"> -->
+                <div class="card choice bg-light border-dark mb-3 text-center" style="max-width: 400px; min-width: 200px;">
+                    <div class="card-header choice">
+                        {{ scales.section }}
                     </div>
                     <div class="card-body">
-                        <!--<h5 class="card-title">{{ scales.section }}</h5>-->
                         <h6 class="card-subtitle mb-2 text-muted">{{ scales.bowing }}</h6>
                         <p class="card-text">{{ scales.detail }}</p>
                         <button type="button" class="btn btn-primary " v-on:click="nextChoice">Next!</button>
                     </div>
                 </div>
-            </div>
-            <div class="col-3"></div>
+            <!-- </div> -->
         </div>
     </div>
 </body>
