@@ -8,33 +8,15 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <title>Scales Practice</title>
+    <link rel="stylesheet" href="styles.css">
+    <title>Scales Practice for Piano Grade 8</title>
 
     <!-- Vue development version, includes helpful console warnings -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-
-    <style>
-        .row {
-            margin: 20px 0;
-        }
-        .card.choice {
-            margin: 15px 0px;
-        }
-        .choice, h6 {
-            font-size: 42px;
-        }
-        p.card-text {
-            color: darkblue;
-        }
-        .btn-lg {
-            line-height: 3.0rem;
-        }
-    </style>
+    <script src="script.js"></script>
 </head>
 
 <body>
-    
     <div id="app" class="container-fluid">
         <div class="row justify-content-center">
             <!-- <div class="col-12"> -->
@@ -52,40 +34,7 @@
         </div>
     </div>
 </body>
-
 <script>
-
-    // get all voices that browser offers
-    var available_voices = window.speechSynthesis.getVoices();
-    // this will hold an english voice
-    var english_voice = '';
-
-    // find voice by language locale "en-US"
-    // if not then select the first voice
-    for(var i=0; i<available_voices.length; i++) {
-        if(available_voices[i].lang === 'en-GBgi') {
-            english_voice = available_voices[i];
-            break;
-        }
-    }
-    if(english_voice === '') {
-        english_voice = available_voices[0];
-    }
-    var utter = new SpeechSynthesisUtterance();
-    utter.rate = 1;
-    utter.pitch = 1.0;
-    // utter.voice = english_voice;
-
-    function speak(selectedCombo) {
-        var text = selectedCombo.section + " " + selectedCombo.playing + ", " + selectedCombo.detail
-        var replaced = text
-            .replace(/♭/, " flat")
-            .replace(/♯/, " sharp");
-        utter.text = replaced;
-        window.speechSynthesis.cancel();
-        window.speechSynthesis.speak(utter);
-    }
-
     var sections = [
         {
             section: 'Scales',
@@ -196,46 +145,20 @@
         }
     ];
 
-    function randomItem(arr) {
-        return arr[Math.floor(Math.random() * arr.length)];
-    }
-
-    function generateAllCombos() {
-        var combos = [];
-        for (var sectionIndex = 0; sectionIndex < sections.length; sectionIndex++) {
-            var section = sections[sectionIndex];
-            var sectionName = section.section;
-            for (var playingIndex = 0; playingIndex < section.playing.length; playingIndex++) {
-                var playing = section.playing[playingIndex];
-                for (var listIndex = 0; listIndex < section.list.length; listIndex++) {
-                    var entry = section.list[listIndex];
-                    combos.push({
-                        section: sectionName,
-                        playing: playing,
-                        detail: entry
-                    });
-                }
-            }
-        }
-        return combos;
-    }
-
     var app = new Vue({
         el: '#app',
         data: {
-            scales: randomItem(generateAllCombos())
+            scales: randomItem(generateAllCombos(sections))
         },
         methods: {
             nextChoice: function() {
-                var combos = generateAllCombos();
+                var combos = generateAllCombos(sections);
                 var selectedCombo = randomItem(combos);
                 this.scales = selectedCombo;
                 speak(selectedCombo);
             }
-
         }
     });
-
 </script>
 
 </html>

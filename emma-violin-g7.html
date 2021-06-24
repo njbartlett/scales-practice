@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles.css">
+
+    <title>Scales Practice for Violin Grade 7</title>
+
+    <!-- Vue development version, includes helpful console warnings -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="script.js"></script>
+</head>
+
+<body>
+    
+    <div id="app" class="container-fluid">
+        <div class="row justify-content-center">
+            <!-- <div class="col-12"> -->
+                <div class="card choice bg-light border-dark mb-3 text-center" style="max-width: 400px; min-width: 200px;">
+                    <div class="card-header choice">
+                        {{ scales.section }}
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">{{ scales.bowing }}</h6>
+                        <p class="card-text">{{ scales.detail }}</p>
+                        <button type="button" class="btn btn-primary btn-block btn-lg" v-on:click="nextChoice">Next!</button>
+                    </div>
+                </div>
+            <!-- </div> -->
+        </div>
+    </div>
+</body>
+
+<script>
+    var sections = [
+        {
+            section: 'Scales',
+            playing: ['Separate', 'Slurred'],
+            list: [
+                "F major",
+                "F minor melodic",
+                "F minor harmonic",
+                "B major",
+                "B minor melodic",
+                "B minor harmonic",
+            ]
+        },
+        {
+            section: 'Arpeggios',
+            playing: ['Separate', 'Slurred'],
+            list: [
+                "F major",
+                "F minor",
+                "B major",
+                "B minor"
+            ]
+        },
+        {
+            section: 'Dominant Sevenths',
+            playing: ['Separate', 'Slurred'],
+            list: [
+                "in the key of G"
+            ]
+        },
+        {
+            section: 'Diminished Sevenths',
+            playing: ['Separate', 'Slurred'],
+            list: [
+                "starting on D"
+            ]
+        },
+        {
+            section: 'Chromatic Scales',
+            playing: ['Separate', 'Slurred'],
+            list: [
+                "starting on D"
+            ]
+        },
+        {
+            section: 'Double-Stop Scales',
+            playing: ['Separate'],
+            list: [
+                "in sixths in G major"
+            ]
+        }
+    ];
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            scales: randomItem(generateAllCombos(sections))
+        },
+        methods: {
+            nextChoice: function() {
+                var combos = generateAllCombos(sections);
+                var selectedCombo = randomItem(combos);
+                this.scales = selectedCombo;
+                speak(selectedCombo);
+            }
+        }
+    });
+</script>
+
+</html>
