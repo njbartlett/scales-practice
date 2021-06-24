@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Scales Practice</title>
+
+    <!-- Vue development version, includes helpful console warnings -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <style>
+        .row {
+            margin: 20px 0;
+        }
+        .card.choice {
+            margin: 15px 0px;
+        }
+        .choice, h6 {
+            font-size: 42px;
+        }
+        p.card-text {
+            color: darkblue;
+        }
+        .btn-lg {
+            line-height: 3.0rem;
+        }
+    </style>
+</head>
+
+<body>
+    
+    <div id="app" class="container-fluid">
+        <div class="row justify-content-center">
+            <!-- <div class="col-12"> -->
+                <div class="card choice bg-light border-dark mb-3 text-center" style="max-width: 400px; min-width: 200px;">
+                    <div class="card-header choice">
+                        {{ scales.section }}
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">{{ scales.playing }}</h6>
+                        <p class="card-text">{{ scales.detail }}</p>
+                        <button type="button" class="btn btn-primary btn-block btn-lg" v-on:click="nextChoice">Next!</button>
+                    </div>
+                </div>
+            <!-- </div> -->
+        </div>
+    </div>
+</body>
+
+<script>
+
+    // get all voices that browser offers
+    var available_voices = window.speechSynthesis.getVoices();
+    // this will hold an english voice
+    var english_voice = '';
+
+    // find voice by language locale "en-US"
+    // if not then select the first voice
+    for(var i=0; i<available_voices.length; i++) {
+        if(available_voices[i].lang === 'en-GBgi') {
+            english_voice = available_voices[i];
+            break;
+        }
+    }
+    if(english_voice === '') {
+        english_voice = available_voices[0];
+    }
+    var utter = new SpeechSynthesisUtterance();
+    utter.rate = 1;
+    utter.pitch = 1.0;
+    // utter.voice = english_voice;
+
+    function speak(selectedCombo) {
+        var text = selectedCombo.section + " " + selectedCombo.playing + ", " + selectedCombo.detail
+        var replaced = text
+            .replace(/♭/, " flat")
+            .replace(/♯/, " sharp");
+        utter.text = replaced;
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(utter);
+    }
+
+    var sections = [
+        {
+            section: 'Scales',
+            playing: ['Legato', 'Staccato'],
+            list: [
+                "C major",
+                "E♭ major",
+                "F♯ major",
+                "A major",
+                "C minor harmonic",
+                "E♭ minor harmonic",
+                "F♯ minor harmonic",
+                "A minor harmonic",
+                "C minor melodic",
+                "E♭ minor melodic",
+                "F♯ minor melodic",
+                "A minor melodic"
+            ]
+        },
+        {
+            section: 'Scales a Sixth Apart',
+            playing: ['Legato', 'Staccato'],
+            list: [
+                "C major",
+                "E♭ major",
+                "F♯ major",
+                "A major",
+                "C minor harmonic",
+                "E♭ minor harmonic",
+                "F♯ minor harmonic",
+                "A minor harmonic"
+            ]
+        },
+        {
+            section: 'Contrary-Motion Scales',
+            playing: ['Legato', 'Staccato'],
+            list: [
+                "C major",
+                "E♭ major",
+                "F♯ major",
+                "A major",
+                "C minor harmonic",
+                "E♭ minor harmonic",
+                "F♯ minor harmonic",
+                "A minor harmonic"
+            ]
+        },
+        {
+            section: 'Legato Scale in Thirds',
+            playing: ['Legato'],
+            list: [
+                "E♭ major"
+            ]
+        },
+        {
+            section: 'Staccato Scale in Sixths',
+            playing: ['Staccato'],
+            list: [
+                "C major"
+            ]
+        },
+        {
+            section: 'Chromatic A Major Scale Sixth Apart',
+            playing: ['Legato', 'Staccato'],
+            list: [
+                "starting on E♭ and C"
+            ]
+        },
+        {
+            section: 'Whole-Tone Scales Similar Motion',
+            playing: ['Legato', 'Staccato'],
+            list: [
+                "starting on E♭",
+                "starting on C"
+            ]
+        },
+        {
+            section: 'Arpeggios',
+            playing: ['Legato'],
+            list: [
+                "C major",
+                "E♭ major",
+                "F♯ major",
+                "A major",
+                "C minor",
+                "E♭ minor",
+                "F♯ minor",
+                "A minor",
+            ]
+        },
+        {
+            section: 'Dominant Sevenths',
+            playing: ['Legato'],
+            list: [
+                "in the key of C",
+                "in the key of E♭",
+                "in the key of F♯",
+                "in the key of A"
+            ]
+        },
+        {
+            section: 'Diminished Sevenths',
+            playing: ['Legato'],
+            list: [
+                "starting on E♭",
+                "starting on C"
+            ]
+        }
+    ];
+
+    function randomItem(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function generateAllCombos() {
+        var combos = [];
+        for (var sectionIndex = 0; sectionIndex < sections.length; sectionIndex++) {
+            var section = sections[sectionIndex];
+            var sectionName = section.section;
+            for (var playingIndex = 0; playingIndex < section.playing.length; playingIndex++) {
+                var playing = section.playing[playingIndex];
+                for (var listIndex = 0; listIndex < section.list.length; listIndex++) {
+                    var entry = section.list[listIndex];
+                    combos.push({
+                        section: sectionName,
+                        playing: playing,
+                        detail: entry
+                    });
+                }
+            }
+        }
+        return combos;
+    }
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            scales: randomItem(generateAllCombos())
+        },
+        methods: {
+            nextChoice: function() {
+                var combos = generateAllCombos();
+                var selectedCombo = randomItem(combos);
+                this.scales = selectedCombo;
+                speak(selectedCombo);
+            }
+
+        }
+    });
+
+</script>
+
+</html>
