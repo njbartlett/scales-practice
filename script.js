@@ -20,7 +20,7 @@ utter.pitch = 1.0;
 // utter.voice = english_voice;
 
 function speak(selectedCombo) {
-    var text = selectedCombo.section + " " + selectedCombo.playing + ", " + selectedCombo.detail
+    var text = selectedCombo.section + ", " + selectedCombo.playing + ", " + selectedCombo.detail
     var replaced = text
         .replace(/♭/, " flat")
         .replace(/♯/, " sharp");
